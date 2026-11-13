@@ -6,8 +6,8 @@ A scale is a `min`, a `max`, and a `step`: the allowed values are `min`, `min + 
 
 Define `ratingScale()` on the rated model:
 
-```php title="app/Course.php"
-namespace App;
+```php title="app/Models/Course.php"
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Pharaonic\Laravel\Ratings\Concerns\HasRatings;
@@ -25,7 +25,7 @@ class Course extends Model
 
 ```php
 $user->rate($course, 8.5);   // allowed
-$user->rate($course, 8.75);  // InvalidArgumentException: not on the rating scale of [App\Course]: 0 to 10 in steps of 0.5
+$user->rate($course, 8.75);  // InvalidArgumentException: not on the rating scale of [App\Models\Course]: 0 to 10 in steps of 0.5
 $user->rate($course, 11);    // InvalidArgumentException
 ```
 

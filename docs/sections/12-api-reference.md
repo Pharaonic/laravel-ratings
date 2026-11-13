@@ -84,3 +84,4 @@ All in `Pharaonic\Laravel\Ratings\Events`.
 | `InvalidArgumentException` | An unsaved model in a write, a value that is not a number or not on the scale, an invalid comment, an invalid minimum average. |
 | `UnexpectedValueException` | An invalid scale, or a direct save of a rating whose rated model no longer exists. |
 | `RuntimeException` | A model event cancelled the save, or the rating kept being deleted while it was written. |
+| `Illuminate\Database\ClassMorphViolationException` | `Relation::enforceMorphMap()` is on and a model has no alias. Nothing is written. |

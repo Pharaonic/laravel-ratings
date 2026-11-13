@@ -1,6 +1,6 @@
 ## Troubleshooting
 
-### "The rating [x] is not on the rating scale of [App\Product]"
+### "The rating [x] is not on the rating scale of [App\Models\Product]"
 
 The value is outside the model's scale or between two steps. Check `$product->ratingScale()`, and validate requests against it before calling `rate()`.
 
@@ -16,7 +16,7 @@ Values are stored with 4 decimal places. Round the value before rating, for exam
 
 The migration never runs over an existing table. Set `pharaonic.ratings.table` to another name before `php artisan migrate`, or move the old table away.
 
-### "The rateable [App\Course] [5] of the rating does not exist"
+### "The rateable [App\Models\Course] [5] of the rating does not exist"
 
 A direct save changed the value of a rating whose rated model was deleted without the cleanup, for example by a query delete. Delete the orphaned rating, as [Deletes and Soft Deletes](#deletion-and-soft-deletes) shows.
 
