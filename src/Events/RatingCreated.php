@@ -15,6 +15,5 @@ final class RatingCreated
         public Rating $rating,
         public Model $rater,
         public Model $rateable,
-    ) {
-    }
+    ) {}
 }

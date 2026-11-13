@@ -38,8 +38,7 @@ final class RatingScale
         private int $min,
         private int $max,
         private int $step,
-    ) {
-    }
+    ) {}
 
     /**
      * The scale of the rateable: its ratingScale() when it has one, the configured scale otherwise.
