@@ -20,6 +20,5 @@ final class RatingUpdated
         public Model $rateable,
         public int|float $previousValue,
         public ?string $previousComment,
-    ) {
-    }
+    ) {}
 }

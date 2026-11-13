@@ -17,6 +17,5 @@ final class RatingRemoved
         public Rating $rating,
         public Model $rater,
         public Model $rateable,
-    ) {
-    }
+    ) {}
 }

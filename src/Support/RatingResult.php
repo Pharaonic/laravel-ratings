@@ -23,8 +23,7 @@ final class RatingResult
         private Rating $rating,
         private int|float|null $previous,
         private int|float $current,
-    ) {
-    }
+    ) {}
 
     /**
      * Whether the call inserted the rating.

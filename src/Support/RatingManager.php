@@ -492,7 +492,7 @@ final class RatingManager
      *
      * @param  array{rater_type: string, rater_id: string, rateable_type: string, rateable_id: string}  $pair
      * @return array{0: 'created'|'updated'|'unchanged', 1: Rating, 2: int|float|null, 3: string|null}|null
-     *                                                                                                       the status, the rating, and its value and comment before the write
+     *                                                                                                      the status, the rating, and its value and comment before the write
      */
     private static function write(array $pair, Model $rateable, string $value, bool $commentGiven, ?string $comment): ?array
     {
