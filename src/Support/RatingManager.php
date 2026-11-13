@@ -215,7 +215,7 @@ final class RatingManager
      */
     public static function average(Model $rateable): ?float
     {
-        $average = self::relation($rateable, 'rateable')->avg('value');
+        $average = self::relation($rateable, 'rateable')->toBase()->avg('value');
 
         if ($average === null) {
             return null;
@@ -229,7 +229,7 @@ final class RatingManager
      */
     public static function sum(Model $rateable): int|float
     {
-        $sum = RatingScale::fromDatabase(self::relation($rateable, 'rateable')->sum('value'));
+        $sum = RatingScale::fromDatabase(self::relation($rateable, 'rateable')->toBase()->sum('value'));
 
         return $sum === null ? 0 : RatingScale::toNumber($sum);
     }

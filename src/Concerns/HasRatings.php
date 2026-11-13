@@ -101,7 +101,7 @@ trait HasRatings
      */
     public function ratingsCount(): int
     {
-        return $this->ratings()->count();
+        return $this->ratings()->toBase()->count();
     }
 
     /**
@@ -131,7 +131,7 @@ trait HasRatings
     public function ratingsWithComments(): MorphMany
     {
         $ratings = $this->ratings();
-        $ratings->whereNotNull($ratings->getRelated()->qualifyColumn('comment'));
+        $ratings->getQuery()->whereNotNull($ratings->getRelated()->qualifyColumn('comment'));
 
         return $ratings;
     }
