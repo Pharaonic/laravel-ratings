@@ -4,7 +4,9 @@ namespace Pharaonic\Laravel\Ratings\Relations;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Pharaonic\Laravel\Ratings\Models\Rating;
 use Pharaonic\Laravel\Ratings\Support\RatingManager;
 
 /**
@@ -16,9 +18,28 @@ use Pharaonic\Laravel\Ratings\Support\RatingManager;
  * and SQLite the string comparison is what lets the unique index be used.
  *
  * @internal
+ *
+ * @template TDeclaringModel of Model
+ *
+ * @extends MorphMany<Rating, TDeclaringModel>
  */
 final class RatingsMorphMany extends MorphMany
 {
+    /**
+     * Declared here so PHPStan 2.1.0, the line's lowest, infers TDeclaringModel
+     * from `new RatingsMorphMany(...)`: it does not read the inherited constructor.
+     *
+     * @param  Builder<Rating>  $query
+     * @param  TDeclaringModel  $parent
+     * @param  string  $type
+     * @param  string  $id
+     * @param  string  $localKey
+     */
+    public function __construct(Builder $query, Model $parent, $type, $id, $localKey)
+    {
+        parent::__construct($query, $parent, $type, $id, $localKey);
+    }
+
     /**
      * The parent key, as the string the ratings table stores.
      *
@@ -34,7 +55,7 @@ final class RatingsMorphMany extends MorphMany
     /**
      * Constrain eager loading to the parents' keys, as strings.
      *
-     * @param  array<int, \Illuminate\Database\Eloquent\Model>  $models
+     * @param  array<int, TDeclaringModel>  $models
      * @return void
      */
     public function addEagerConstraints(array $models)
@@ -56,8 +77,10 @@ final class RatingsMorphMany extends MorphMany
     /**
      * The subquery behind has(), whereHas() and withCount().
      *
+     * @param  Builder<Rating>  $query
+     * @param  Builder<TDeclaringModel>  $parentQuery
      * @param  mixed  $columns
-     * @return Builder
+     * @return Builder<Rating>
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {

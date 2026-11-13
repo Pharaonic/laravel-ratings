@@ -178,6 +178,11 @@ final class RatingManager
 
     /**
      * The ratings given (rater) or received (rateable) by the model.
+     *
+     * @template TDeclaringModel of Model
+     *
+     * @param  TDeclaringModel  $parent
+     * @return MorphMany<Rating, TDeclaringModel>
      */
     public static function relation(Model $parent, string $side): MorphMany
     {
@@ -195,6 +200,10 @@ final class RatingManager
 
     /**
      * Limit a ratings query to one rater or rateable. An unsaved model matches nothing.
+     *
+     * @template TModel of Model
+     *
+     * @param  Builder<TModel>  $query
      */
     public static function constrain(Builder $query, string $side, Model $model): void
     {
@@ -252,18 +261,14 @@ final class RatingManager
         $distribution = [];
 
         foreach ($rows as $row) {
-            if (! is_object($row)) {
-                continue;
-            }
-
-            $value = RatingScale::fromDatabase($row->value ?? null);
+            $value = RatingScale::fromDatabase(data_get($row, 'value'));
 
             if ($value === null) {
                 continue;
             }
 
             $key = str_contains($value, '.') ? $value : (int) $value;
-            $count = $row->aggregate ?? 0;
+            $count = data_get($row, 'aggregate', 0);
             $distribution[$key] = ($distribution[$key] ?? 0) + (is_numeric($count) ? (int) $count : 0);
         }
 
@@ -273,6 +278,11 @@ final class RatingManager
     /**
      * Only the rateables whose average rating, rounded to 4 decimal places as
      * average() rounds it, is at least the minimum. Rateables without ratings never match.
+     *
+     * @template TModel of Model
+     *
+     * @param  Builder<TModel>  $query
+     * @param  TModel  $rateable
      *
      * @throws InvalidArgumentException when the minimum is not a number with up to 4 decimal places
      */
@@ -691,6 +701,8 @@ final class RatingManager
     /**
      * A query on the ratings table without the model's global scopes, which
      * must not hide the row that holds a pair.
+     *
+     * @return Builder<Rating>
      */
     private static function unscoped(?Rating $rating = null): Builder
     {

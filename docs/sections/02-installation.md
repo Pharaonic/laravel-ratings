@@ -4,8 +4,8 @@ Install the package with Composer and create its table.
 
 ### Requirements
 
-- PHP 8.1, 8.2 or 8.3
-- Laravel 10
+- PHP 8.2, 8.3 or 8.4
+- Laravel 11
 - MySQL 5.7+, MariaDB 10.6+, PostgreSQL, or SQLite
 
 ### Composer Installation
@@ -48,11 +48,11 @@ The file is published to `config/pharaonic/ratings.php`.
 
 ### Tested Databases
 
-This release line is tested on PHP 8.1, 8.2 and 8.3 with Laravel 10 against:
+This release line is tested on PHP 8.2, 8.3 and 8.4 with Laravel 11 against:
 
 | Database | Versions tested |
 | --- | --- |
-| SQLite | the versions bundled with PHP 8.1, 8.2 and 8.3 |
+| SQLite | the versions bundled with PHP 8.2, 8.3 and 8.4 |
 | MySQL | 5.7, 8.4 |
 | MariaDB | 10.6 |
 | PostgreSQL | 16 |

@@ -25,6 +25,8 @@ trait CanRate
 
     /**
      * The ratings this model gave.
+     *
+     * @return MorphMany<Rating, $this>
      */
     public function givenRatings(): MorphMany
     {

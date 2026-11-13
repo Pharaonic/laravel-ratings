@@ -72,6 +72,8 @@ class Rating extends Model
 
     /**
      * The model that gave the rating.
+     *
+     * @return MorphTo<Model, $this>
      */
     public function rater(): MorphTo
     {
@@ -80,6 +82,8 @@ class Rating extends Model
 
     /**
      * The model that is rated.
+     *
+     * @return MorphTo<Model, $this>
      */
     public function rateable(): MorphTo
     {
@@ -88,6 +92,8 @@ class Rating extends Model
 
     /**
      * Only the ratings given by the rater.
+     *
+     * @param  Builder<Rating>  $query
      */
     public function scopeWhereRater(Builder $query, Model $rater): void
     {
@@ -96,6 +102,8 @@ class Rating extends Model
 
     /**
      * Only the ratings of the rateable.
+     *
+     * @param  Builder<Rating>  $query
      */
     public function scopeWhereRateable(Builder $query, Model $rateable): void
     {

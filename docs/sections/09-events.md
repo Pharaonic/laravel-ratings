@@ -24,12 +24,17 @@ class UpdateProductScore
 }
 ```
 
-```php title="app/Providers/EventServiceProvider.php"
-protected $listen = [
-    \Pharaonic\Laravel\Ratings\Events\RatingUpdated::class => [
-        \App\Listeners\UpdateProductScore::class,
-    ],
-];
+Laravel discovers the listener in `app/Listeners` from the `RatingUpdated` type of its `handle()` method. To register it yourself, add it in a service provider:
+
+```php title="app/Providers/AppServiceProvider.php"
+use App\Listeners\UpdateProductScore;
+use Illuminate\Support\Facades\Event;
+use Pharaonic\Laravel\Ratings\Events\RatingUpdated;
+
+public function boot(): void
+{
+    Event::listen(RatingUpdated::class, UpdateProductScore::class);
+}
 ```
 
 ### When listeners run
