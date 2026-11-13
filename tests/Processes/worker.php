@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Event;
 use Pharaonic\Laravel\Ratings\Events\RatingCreated;
 use Pharaonic\Laravel\Ratings\Events\RatingRemoved;
 use Pharaonic\Laravel\Ratings\Events\RatingUpdated;
-use Pharaonic\Laravel\Ratings\Tests\Concurrency\WorkerApplication;
 use Pharaonic\Laravel\Ratings\Tests\Fixtures\Product;
 use Pharaonic\Laravel\Ratings\Tests\Fixtures\User;
+use Pharaonic\Laravel\Ratings\Tests\Processes\WorkerApplication;
 
 require __DIR__.'/../../vendor/autoload.php';
 
