@@ -252,18 +252,14 @@ final class RatingManager
         $distribution = [];
 
         foreach ($rows as $row) {
-            if (! is_object($row)) {
-                continue;
-            }
-
-            $value = RatingScale::fromDatabase($row->value ?? null);
+            $value = RatingScale::fromDatabase(data_get($row, 'value'));
 
             if ($value === null) {
                 continue;
             }
 
             $key = str_contains($value, '.') ? $value : (int) $value;
-            $count = $row->aggregate ?? 0;
+            $count = data_get($row, 'aggregate', 0);
             $distribution[$key] = ($distribution[$key] ?? 0) + (is_numeric($count) ? (int) $count : 0);
         }
 
