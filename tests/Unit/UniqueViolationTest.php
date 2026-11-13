@@ -7,7 +7,7 @@ test('only unique violations are recognized', function (string $sqlState, ?int $
     $pdo = new PDOException($message);
     $pdo->errorInfo = [$sqlState, $driverCode, $message];
 
-    $exception = new QueryException('insert into "ratings" ...', [], $pdo);
+    $exception = new QueryException('testing', 'insert into "ratings" ...', [], $pdo);
 
     $this->assertSame($unique, RatingManager::isUniqueViolation($exception));
 })->with([

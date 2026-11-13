@@ -346,7 +346,7 @@ test('only the pair index is recognized', function (string $sqlState, string $me
     $pdo = new PDOException('SQLSTATE['.$sqlState.']: '.$message);
     $pdo->errorInfo = [$sqlState, $code, $message];
 
-    $this->assertSame($pair, RatingManager::isPairViolation(new QueryException('insert ...', [], $pdo), new Rating));
+    $this->assertSame($pair, RatingManager::isPairViolation(new QueryException('testing', 'insert ...', [], $pdo), new Rating));
 })->with([
     'mysql pair' => ['23000', "Duplicate entry 'x' for key 'ratings.ratings_unique_pair'", 1062, true],
     'mysql other' => ['23000', "Duplicate entry 'x' for key 'ratings.ratings_slug_unique'", 1062, false],
@@ -370,7 +370,7 @@ function failRatingInsertsWith(string $message, string $sqlState = '23000'): std
         $pdo = new PDOException('SQLSTATE['.$sqlState.']: Integrity constraint violation: '.$message);
         $pdo->errorInfo = [$sqlState, $sqlState === '23505' ? 7 : 19, $message];
 
-        throw new QueryException('insert into "ratings" ...', [], $pdo);
+        throw new QueryException('testing', 'insert into "ratings" ...', [], $pdo);
     });
 
     return $attempts;
@@ -410,7 +410,7 @@ function deadlockRatingInserts(int $times): stdClass
         $pdo = new PDOException($message);
         $pdo->errorInfo = ['40001', 1213, 'Deadlock found when trying to get lock; try restarting transaction'];
 
-        throw new QueryException('insert into `ratings` ...', [], $pdo);
+        throw new QueryException('testing', 'insert into `ratings` ...', [], $pdo);
     });
 
     return $attempts;
