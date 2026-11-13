@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\ClassMorphViolationException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use Pharaonic\Laravel\Ratings\Models\Rating;
@@ -72,6 +73,26 @@ test('integer rateables are found by string and integer keys', function () {
 
     $this->assertTrue($user->hasRated($found));
     $this->assertSame(1, Product::whereRatingAtLeast(4)->whereKey($product->getKey())->count());
+});
+
+test('an enforced morph map refuses an unmapped model before writing', function () {
+    if (! method_exists(Relation::class, 'enforceMorphMap')) {
+        $this->markTestSkipped('Relation::enforceMorphMap() needs Laravel 8.');
+    }
+
+    Relation::enforceMorphMap(['user' => User::class, 'product' => Product::class]);
+
+    $user = User::create();
+    $this->assertTrue($user->rate(Product::create(), 4)->created());
+
+    try {
+        $user->rate(Post::create(), 4);
+        $this->fail('An unmapped model was rated.');
+    } catch (ClassMorphViolationException $exception) {
+        $this->assertStringContainsString(Post::class, $exception->getMessage());
+    }
+
+    $this->assertSame(1, Rating::query()->count());
 });
 
 test('a morph map alias is stored and used everywhere', function () {
