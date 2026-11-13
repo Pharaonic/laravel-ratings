@@ -1,0 +1,21 @@
+- Getting Started
+  - [Overview](#overview)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- Usage
+  - [Basic Usage](#basic-usage)
+  - [Comments](#comments)
+  - [Rating Scales](#rating-scales)
+  - [Queries and Aggregates](#queries-and-aggregates)
+  - [Morph Maps and Ids](#morph-maps-and-ids)
+  - [Events](#events)
+  - [Deletes and Soft Deletes](#deletion-and-soft-deletes)
+  - [Integrity and Concurrency](#integrity-and-concurrency)
+- API Reference
+  - [Reference](#api-reference)
+  - [Compared with Likes and Bookmarks](#comparison)
+- Examples
+  - [Use Cases](#examples)
+  - [Troubleshooting](#troubleshooting)
+- Community
+  - [Contributors](#contributors)
