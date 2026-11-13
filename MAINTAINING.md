@@ -51,7 +51,8 @@ Configuration keys (`pharaonic.ratings.*`), publish tags, and registered Blade, 
 - `whereRatingAtLeast()` compares `round((avg subquery), 4) >= cast(? as decimal(10, 4))`: the cast keeps SQLite from comparing the bound string as text.
 - The scale arithmetic counts 0.0001 units in PHP integers, so it needs 64-bit PHP.
 - `phpstan.neon.dist` also analyses `tests/Fixtures`: PHPStan analyses a trait only through a class that uses it.
-- `ConcurrencyTest` runs separate PHP processes against a shared database: a SQLite file by default, MySQL, MariaDB, or PostgreSQL through the `RATINGS_DB*` environment variables (`.github/workflows/databases.yml`).
+- `ConcurrencyTest` runs separate PHP processes (`tests/Processes/worker.php`) against a shared database: a SQLite file by default, MySQL, MariaDB, or PostgreSQL through the `RATINGS_DB*` environment variables (`.github/workflows/databases.yml`).
+- The published-migration test needs a process where the migration class was never declared. `6.x` runs it as a PHPUnit class in separate processes; Pest cannot, so later lines run `tests/Processes/published-migration.php` as a subprocess.
 
 ## Branch notes
 
