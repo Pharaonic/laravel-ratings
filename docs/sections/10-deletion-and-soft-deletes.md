@@ -33,7 +33,7 @@ Set `cleanup_on_delete` to `false` to keep the ratings of deleted models, for ex
 To find such orphaned ratings later, check them against their table in chunks:
 
 ```php
-use App\Product;
+use App\Models\Product;
 use Pharaonic\Laravel\Ratings\Models\Rating;
 
 Rating::query()

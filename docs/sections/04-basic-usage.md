@@ -2,8 +2,8 @@
 
 Add `CanRate` to the model that gives ratings and `HasRatings` to the model that receives them. The rater does not have to be a user, and a model can use both traits.
 
-```php title="app/User.php"
-namespace App;
+```php title="app/Models/User.php"
+namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Pharaonic\Laravel\Ratings\Concerns\CanRate;
@@ -14,8 +14,8 @@ class User extends Authenticatable
 }
 ```
 
-```php title="app/Product.php"
-namespace App;
+```php title="app/Models/Product.php"
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Pharaonic\Laravel\Ratings\Concerns\HasRatings;

@@ -9,7 +9,7 @@ The controller validates the request against the product's own scale, then repor
   ```php title="app/Http/Controllers/ProductRatingController.php"
   namespace App\Http\Controllers;
 
-  use App\Product;
+  use App\Models\Product;
   use Illuminate\Http\Request;
 
   class ProductRatingController extends Controller
@@ -40,8 +40,10 @@ The controller validates the request against the product's own scale, then repor
 - ===Routes
 
   ```php title="routes/web.php"
-  Route::post('products/{product}/rating', 'ProductRatingController@store')->middleware('auth');
-  Route::delete('products/{product}/rating', 'ProductRatingController@destroy')->middleware('auth');
+  use App\Http\Controllers\ProductRatingController;
+
+  Route::post('products/{product}/rating', [ProductRatingController::class, 'store'])->middleware('auth');
+  Route::delete('products/{product}/rating', [ProductRatingController::class, 'destroy'])->middleware('auth');
   ```
 
 The form always sends a comment field, so an empty textarea clears the comment. To change only the stars, call `rate()` without the third argument.
@@ -95,7 +97,7 @@ public function update(Request $request, Product $product)
 
 ### 4. Half-star course ratings
 
-```php title="app/Course.php"
+```php title="app/Models/Course.php"
 class Course extends Model
 {
     use HasRatings;

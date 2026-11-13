@@ -12,11 +12,26 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 public function boot()
 {
     Relation::morphMap([
-        'user' => \App\User::class,
-        'product' => \App\Product::class,
+        'user' => \App\Models\User::class,
+        'product' => \App\Models\Product::class,
     ]);
 }
 ```
+
+### Enforced morph maps
+
+With `Relation::enforceMorphMap()`, every model that rates or is rated needs an alias. Rating with an unmapped model throws Laravel's `ClassMorphViolationException` before anything is written:
+
+```php
+Relation::enforceMorphMap([
+    'user' => \App\Models\User::class,
+    'product' => \App\Models\Product::class,
+]);
+
+$user->rate($course, 4); // ClassMorphViolationException: No morph map defined for model [App\Models\Course].
+```
+
+### Type length
 
 The type column holds up to 191 characters. A longer class name throws an `InvalidArgumentException` that suggests a morph map alias.
 
