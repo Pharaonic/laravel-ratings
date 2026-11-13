@@ -1,0 +1,111 @@
+name: Databases
+
+# Runs the tests, including the concurrent-process tests, against MySQL,
+# MariaDB, and PostgreSQL. build.yml covers SQLite on every PHP and operating
+# system.
+on:
+  push:
+    branches:
+      - develop
+      - "[0-9]*.x"
+  pull_request:
+    branches:
+      - develop
+      - "[0-9]*.x"
+  workflow_dispatch:
+
+concurrency:
+  group: "databases-${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.database }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - database: mysql
+            driver: mysql
+            port: 3306
+            username: root
+          - database: mariadb
+            driver: mysql
+            port: 3307
+            username: root
+          - database: pgsql
+            driver: pgsql
+            port: 5432
+            username: postgres
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: ratings
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping -psecret" --health-interval=5s --health-timeout=5s --health-retries=20
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MARIADB_ROOT_PASSWORD: secret
+          MARIADB_DATABASE: ratings
+        ports:
+          - 3307:3306
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=5s --health-timeout=5s --health-retries=20
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: ratings
+        ports:
+          - 5432:5432
+        options: --health-cmd=pg_isready --health-interval=5s --health-timeout=5s --health-retries=20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # The lowest PHP of the line, read from require.php (">=8.A <8.B").
+      - name: Read the lowest PHP
+        id: php
+        shell: bash
+        run: |
+          constraint="$(jq -r '.require.php' composer.json)"
+
+          if [[ ! "$constraint" =~ ^\>=8\.([0-9]+)\ \<8\.([0-9]+)$ ]]; then
+            echo "require.php must read \">=8.A <8.B\", got: $constraint" >&2
+            exit 1
+          fi
+
+          echo "version=8.${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ steps.php.outputs.version }}
+          extensions: pdo_mysql, pdo_pgsql
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v4
+        with:
+          dependency-versions: highest
+
+      - name: Run tests
+        env:
+          RATINGS_DB: ${{ matrix.driver }}
+          RATINGS_DB_HOST: 127.0.0.1
+          RATINGS_DB_PORT: ${{ matrix.port }}
+          RATINGS_DB_DATABASE: ratings
+          RATINGS_DB_USERNAME: ${{ matrix.username }}
+          RATINGS_DB_PASSWORD: secret
+        run: composer test
