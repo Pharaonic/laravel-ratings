@@ -27,6 +27,8 @@ trait HasRatings
 
     /**
      * The ratings this model received.
+     *
+     * @return MorphMany<Rating, $this>
      */
     public function ratings(): MorphMany
     {
@@ -127,6 +129,8 @@ trait HasRatings
     /**
      * The ratings that have a comment. A comment is never blank: a blank
      * string is stored as null.
+     *
+     * @return MorphMany<Rating, $this>
      */
     public function ratingsWithComments(): MorphMany
     {
@@ -138,6 +142,8 @@ trait HasRatings
 
     /**
      * Only the models the rater rated.
+     *
+     * @param  Builder<static>  $query
      */
     public function scopeWhereRatedBy(Builder $query, Model $rater): void
     {
@@ -150,6 +156,7 @@ trait HasRatings
      * Only the models whose average rating is at least $average (rounded to 4
      * decimal places, as averageRating() returns it). Models without ratings never match.
      *
+     * @param  Builder<static>  $query
      * @param  int|float|string  $average
      *
      * @throws \InvalidArgumentException when $average is not a number with up to 4 decimal places
